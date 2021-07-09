@@ -11,9 +11,12 @@ const auth: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>Login Ting</h1>
-      <p>Pls sign in thanks</p>
+    <div className='wrapper auth'>
+      <div className='welcome'>
+        <h1>Login</h1>
+        <p>Welcome to yet another todo app.</p>
+        <p>Kinda need ya to sign in :)</p>
+      </div>
       <FirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     </div>
   )

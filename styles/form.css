@@ -1,0 +1,42 @@
+form {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+input {
+	font-size: 1.25rem;
+	width: 100%;
+	margin-right: 0.5rem;
+	padding: 0.25rem 0;
+	font-family: "Source Sans Pro", sans-serif;
+	background-color: var(--dark);
+	color: var(--light);
+	border: none;
+	border-bottom: 1px solid var(--dim);
+	outline: none;
+}
+
+button {
+	font-family: "Source Sans Pro", sans-serif;
+	width: max-content;
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+	background-color: var(--dark);
+	color: var(--light);
+	border: 0.0625rem solid var(--dim);
+	border-radius: 0.25rem;
+	box-shadow: 2px 2px 2px var(--dim);
+	cursor: pointer;
+	transition: all ease 0.1s;
+}
+
+button:hover {
+	transform: translate(2px, 2px);
+	box-shadow: none;
+}
+
+button:focus-within {
+	border: 0.0625rem solid var(--light);
+}

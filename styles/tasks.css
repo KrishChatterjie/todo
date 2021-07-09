@@ -1,0 +1,17 @@
+.tasks {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.task {
+  display: flex;
+  font-size: 1.25rem;
+  font-weight: 300;
+  padding: 1rem;
+  margin: 0.25rem 0;
+  background-color: var(--dim);
+  border-radius: 0.25rem;
+  width: 100%;
+  overflow-wrap: anywhere;
+}
