@@ -5,6 +5,7 @@
 }
 
 .task {
+  position: relative;
   display: flex;
   font-size: 1.125rem;
   font-weight: 300;
@@ -14,9 +15,17 @@
   border-radius: 0.25rem;
   width: 100%;
   overflow-wrap: anywhere;
-  text-decoration: none;
+  transition: all 1.25s ease;
 }
 
 .task.done {
+  opacity: 0;
+}
+
+.task.done p {
   text-decoration: line-through;
+}
+
+.task span {
+  margin-right: 0.75rem;
 }

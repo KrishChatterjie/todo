@@ -10,7 +10,8 @@ interface Props {
 const Task: React.FC<Props> = ({ task, completed, completeTask }) => {
   return (
     <div className={`task ${completed ? 'done' : ''}`} onClick={completeTask}>
-      {task?.data().title}
+      <span>{completed ? '🥂' : '📜'}</span>
+      <p>{task?.data().title}</p>
     </div>
   )
 }
