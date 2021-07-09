@@ -5,24 +5,21 @@ import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore'
 import { useRouter } from 'next/dist/client/router'
 import Form from '../components/Form'
 import Task from '../components/Task'
+import { useRef } from 'react'
 
 export default function Home() {
   const db = firebase.firestore()
   const [user, userLoading, userError] = useAuthState(firebase.auth())
-  // TODO: redirect to /auth if !user
   const [tasks, tasksLoading, tasksError] = useCollection(db.collection('users').doc(user?.uid).collection('tasks'))
-  const orderedTasks = useDocumentData(db.collection('users').doc(user?.uid))[0]?.orderedTasks
+  let orderedTasks = useDocumentData(db.collection('users').doc(user?.uid))[0]?.orderedTasks
   const [newTask, setNewTask] = useState('')
+  const [finTask, setFinTask] = useState('')
+  const finRef= useRef('')
   const router = useRouter()
 
   useEffect(() => {
     if (!userLoading && !user) router.push('/auth')
   }, [user, userLoading, router])
-
-
-  // if (!tasksLoading && tasks) {
-  //   tasks.docs.map((doc) => console.log(doc.data()))
-  // }
 
   const handleLogout = async () => {
     try {
@@ -44,7 +41,36 @@ export default function Home() {
     })
   }
 
-  const handleClick = (e: React.BaseSyntheticEvent) => {
+  const completeTask = async (id: string) => {
+    if (finRef.current === '') return
+    orderedTasks = orderedTasks.filter((taskId: string) => taskId !== id)
+    try {
+      await db.collection('users').doc(user?.uid).update({
+        orderedTasks: orderedTasks
+      })
+      await db.collection('users').doc(user?.uid).collection('tasks').doc(id).update({
+        completed: true,
+      })
+      finRef.current = ''
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const handleTaskClick = (taskId: string) => {
+    if (finRef.current === taskId) {
+      setFinTask('')
+      finRef.current = ''
+      return
+    }
+    setFinTask(taskId)
+    finRef.current = taskId
+    setTimeout(() => {
+      completeTask(finRef.current)
+    }, 1000)
+  }
+
+  const handleSubmit = (e: React.BaseSyntheticEvent) => {
     e.preventDefault()
     if (newTask === '') return
     addTask()
@@ -53,18 +79,20 @@ export default function Home() {
 
   return (
     <div className='wrapper'>
-      <h1 className='shite'>Get Yo Shit Done!</h1>
+      <h1>{`Get Your Shit Done, ${user?.displayName?.split(' ')[0]}!`}</h1>
       {user && orderedTasks &&
         <>
           <h2>New Task</h2>
-          <Form newTask={newTask} setNewTask={setNewTask} handleClick={handleClick} />
+          <Form newTask={newTask} setNewTask={setNewTask} handleClick={handleSubmit} />
           <h2>Tasks</h2>
           <div className='tasks'>
             {orderedTasks.map((taskId: string) => {
               return (
-                <Task key={taskId} task={
-                  tasks?.docs.find((doc) => doc.id === taskId)
-                } />
+                <Task
+                  key={taskId}
+                  task={tasks?.docs.find((doc) => doc.id === taskId)}
+                  completed={finTask === taskId}
+                  completeTask={() => handleTaskClick(taskId)}/>
               )
             })}
           </div>

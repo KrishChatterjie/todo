@@ -6,7 +6,7 @@
 
 .task {
   display: flex;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 300;
   padding: 1rem;
   margin: 0.25rem 0;
@@ -14,4 +14,9 @@
   border-radius: 0.25rem;
   width: 100%;
   overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.task.done {
+  text-decoration: line-through;
 }
