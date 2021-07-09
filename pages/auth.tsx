@@ -1,5 +1,4 @@
 import React from 'react'
-import { StyledFirebaseAuth } from 'react-firebaseui'
 import FirebaseAuth from '../firebase/firebaseAuth'
 import firebase from './../firebase/clientApp'
 
