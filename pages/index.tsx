@@ -18,7 +18,7 @@ export default function Home() {
   const finRef= useRef('')
   const router = useRouter()
 
-  //sounds
+  // Sounds
   const [playBurgir] = useSound('/sounds/Burgir.mp3')
   const [playZep] = useSound('/sounds/Immigrant_Song.mp3')
   const [playTodo] = useSound('/sounds/MS_Todo.mp3')
@@ -45,10 +45,19 @@ export default function Home() {
       title: newTask,
     })
     const docId = docRef.id
-    orderedTasks.push(docId)
-    db.collection('users').doc(user?.uid).update({
-      orderedTasks: orderedTasks
-    })
+    if (orderedTasks) {
+      orderedTasks.push(docId)
+      db.collection('users').doc(user?.uid).update({
+        orderedTasks: orderedTasks
+      })
+    }
+    else {
+      orderedTasks = [docId]
+      db.collection('users').doc(user?.uid).set({
+        orderedTasks: orderedTasks
+      })
+    }
+
   }
 
   const playRandomSound = () => {
@@ -95,13 +104,13 @@ export default function Home() {
 
   return (
     <div className='wrapper'>
-      {user && orderedTasks &&
+      {user &&
         <>
           <h1>{`Get Your Shit Done, ${user?.displayName?.split(' ')[0]}!`}</h1>
           <h2>New Task</h2>
           <Form newTask={newTask} setNewTask={setNewTask} handleClick={handleSubmit} />
           <h2>Tasks</h2>
-          {!tasksLoading &&
+          {!tasksLoading && orderedTasks &&
             <div className='tasks'>
               {orderedTasks.map((taskId: string) => {
                 return (
