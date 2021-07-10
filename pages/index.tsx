@@ -7,6 +7,7 @@ import Form from '../components/Form'
 import Task from '../components/Task'
 import { useRef } from 'react'
 import useSound from 'use-sound'
+import Top from '../components/Top'
 
 export default function Home() {
   const db = firebase.firestore()
@@ -103,29 +104,32 @@ export default function Home() {
   }
 
   return (
-    <div className='wrapper'>
-      {user &&
-        <>
-          <h1>{`Get Your Shit Done, ${user?.displayName?.split(' ')[0]}!`}</h1>
-          <h2>New Task</h2>
-          <Form newTask={newTask} setNewTask={setNewTask} handleClick={handleSubmit} />
-          <h2>Tasks</h2>
-          {!tasksLoading && orderedTasks &&
-            <div className='tasks'>
-              {orderedTasks.map((taskId: string) => {
-                return (
-                  <Task
-                    key={taskId}
-                    task={tasks?.docs.find((doc) => doc.id === taskId)}
-                    completed={finTask === taskId}
-                    completeTask={() => handleTaskClick(taskId)}/>
-                )
-              })}
-            </div>
-          }
-          <button id='logout' onClick={handleLogout}>Logout</button>
-        </>
-      }
-    </div>
+    <>
+      <Top />
+      <div className='wrapper'>
+        {user &&
+          <>
+            <h1>{`Get Your Shit Done, ${user?.displayName?.split(' ')[0]}!`}</h1>
+            <h2>New Task</h2>
+            <Form newTask={newTask} setNewTask={setNewTask} handleClick={handleSubmit} />
+            <h2>Tasks</h2>
+            {!tasksLoading && orderedTasks &&
+              <div className='tasks'>
+                {orderedTasks.map((taskId: string) => {
+                  return (
+                    <Task
+                      key={taskId}
+                      task={tasks?.docs.find((doc) => doc.id === taskId)}
+                      completed={finTask === taskId}
+                      completeTask={() => handleTaskClick(taskId)}/>
+                  )
+                })}
+              </div>
+            }
+            <button id='logout' onClick={handleLogout}>Logout</button>
+          </>
+        }
+      </div>
+    </>
   )
 }
